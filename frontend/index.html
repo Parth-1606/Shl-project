@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHL Assessment Assistant</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Modern Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Header -->
+        <header class="chat-header">
+            <div class="logo">
+                <div class="logo-icon"><i class="ri-brain-line"></i></div>
+                <div>
+                    <h1>SHL Assessment AI</h1>
+                    <span class="status"><span class="dot"></span> Online</span>
+                </div>
+            </div>
+            <button class="settings-btn"><i class="ri-settings-4-line"></i></button>
+        </header>
+
+        <!-- Chat Area -->
+        <main class="chat-box" id="chat-box">
+            <!-- Initial Greeting -->
+            <div class="message bot">
+                <div class="avatar"><i class="ri-robot-2-line"></i></div>
+                <div class="content">
+                    <p>Hello! I am your SHL Assessment Recommendation Agent. Tell me what kind of test you're looking for, or ask me to compare some tests!</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Input Area -->
+        <footer class="chat-input-area">
+            <form id="chat-form">
+                <input type="text" id="user-input" placeholder="Type your message here..." autocomplete="off" required>
+                <button type="submit" id="send-btn"><i class="ri-send-plane-fill"></i></button>
+            </form>
+        </footer>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+[
+    {
+        "name": "Occupational Personality Questionnaire (OPQ32)",
+        "url": "https://www.shl.com/en/assessments/personality/opq32",
+        "description": "A comprehensive personality assessment that provides detailed insights into how a candidate's behavioral style impacts performance at work. It helps organizations understand a candidate's strengths and areas for development.",
+        "test_type": "Personality",
+        "skills_measured": [
+            "Leadership",
+            "Teamwork",
+            "Communication",
+            "Problem Solving",
+            "Resilience"
+        ],
+        "job_roles": [
+            "Manager",
+            "Executive",
+            "Sales",
+            "Customer Service",
+            "Graduate"
+        ],
+        "duration": "25-45 minutes",
+        "remote_testing": "Yes",
+        "adaptive": "No",
+        "languages": [
+            "English",
+            "Spanish",
+            "French",
+            "German",
+            "Mandarin"
+        ]
+    },
+    {
+        "name": "Verify G+",
+        "url": "https://www.shl.com/en/assessments/cognitive/verify-g-plus",
+        "description": "An adaptive cognitive ability test assessing deductive, inductive, and numerical reasoning. It provides a highly reliable measure of general mental ability, a strong predictor of job performance.",
+        "test_type": "Cognitive Ability",
+        "skills_measured": [
+            "Numerical Reasoning",
+            "Inductive Reasoning",
+            "Deductive Reasoning",
+            "Critical Thinking"
+        ],
+        "job_roles": [
+            "Analyst",
+            "Engineer",
+            "Developer",
+            "Finance",
+            "Management"
+        ],
+        "duration": "30-40 minutes",
+        "remote_testing": "Yes",
+        "adaptive": "Yes",
+        "languages": [
+            "English",
+            "French",
+            "German"
+        ]
+    },
+    {
+        "name": "Coding Simulation (Java)",
+        "url": "https://www.shl.com/en/assessments/skills/coding-java",
+        "description": "A practical coding simulation that assesses a candidate's ability to write, debug, and optimize Java code in a real-world development environment.",
+        "test_type": "Technical Skills",
+        "skills_measured": [
+            "Java",
+            "Data Structures",
+            "Algorithms",
+            "Debugging",
+            "Object-Oriented Programming"
+        ],
+        "job_roles": [
+            "Java Developer",
+            "Software Engineer",
+            "Backend Developer"
+        ],
+        "duration": "60 minutes",
+        "remote_testing": "Yes",
+        "adaptive": "No",
+        "languages": [
+            "English"
+        ]
+    },
+    {
+        "name": "Situational Judgement Test (SJT)",
+        "url": "https://www.shl.com/en/assessments/behavioral/sjt",
+        "description": "Assesses how candidates handle typical workplace scenarios. It measures judgment, decision-making, and alignment with company values through realistic work situations.",
+        "test_type": "Behavioral",
+        "skills_measured": [
+            "Decision Making",
+            "Conflict Resolution",
+            "Professionalism",
+            "Customer Focus"
+        ],
+        "job_roles": [
+            "Customer Service",
+            "Retail",
+            "Call Center",
+            "Entry Level"
+        ],
+        "duration": "20-30 minutes",
+        "remote_testing": "Yes",
+        "adaptive": "No",
+        "languages": [
+            "English",
+            "Spanish",
+            "French"
+        ]
+    },
+    {
+        "name": "Spoken English Assessment (AutoMark)",
+        "url": "https://www.shl.com/en/assessments/language/spoken-english",
+        "description": "An AI-driven assessment that measures spoken English proficiency, including pronunciation, fluency, and vocabulary, using advanced speech recognition technology.",
+        "test_type": "Language Proficiency",
+        "skills_measured": [
+            "Spoken English",
+            "Pronunciation",
+            "Fluency",
+            "Listening Comprehension"
+        ],
+        "job_roles": [
+            "BPO",
+            "Customer Support",
+            "Sales",
+            "Global Teams"
+        ],
+        "duration": "15-20 minutes",
+        "remote_testing": "Yes",
+        "adaptive": "No",
+        "languages": [
+            "English"
+        ]
+    }
+]
