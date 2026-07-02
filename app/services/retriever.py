@@ -1,11 +1,9 @@
 import os
 import logging
-from typing import List
-from dotenv import load_dotenv
+from typing import List, Dict
 
-from langchain_core.documents import Document
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain_community.vectorstores import Chroma
+import chromadb
+from dotenv import load_dotenv
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -13,14 +11,14 @@ logger = logging.getLogger(__name__)
 class CatalogRetriever:
     """
     Service layer for querying the ChromaDB vector store.
-    Uses Google Generative AI Embeddings (API-based, no local model needed)
+    Uses ChromaDB's native API with built-in ONNX embeddings (all-MiniLM-L6-v2)
     to keep memory usage low on Render's free tier.
     """
     
     def __init__(self):
         self.chroma_dir = os.getenv("CHROMA_DB_DIR", "./chroma_db")
         self.collection_name = "shl_catalog"
-        self._vector_store = None
+        self._collection = None
         self._init_store()
 
     def _init_store(self):
@@ -30,21 +28,15 @@ class CatalogRetriever:
             return
 
         try:
-            api_key = os.getenv("GOOGLE_API_KEY", "")
-            embeddings = GoogleGenerativeAIEmbeddings(
-                model="models/text-embedding-004",
-                google_api_key=api_key
+            client = chromadb.PersistentClient(path=self.chroma_dir)
+            self._collection = client.get_collection(
+                name=self.collection_name
             )
-            self._vector_store = Chroma(
-                persist_directory=self.chroma_dir,
-                embedding_function=embeddings,
-                collection_name=self.collection_name
-            )
-            logger.info("Successfully connected to ChromaDB vector store.")
+            logger.info(f"Successfully connected to ChromaDB collection '{self.collection_name}' with {self._collection.count()} documents.")
         except Exception as e:
             logger.error(f"Failed to initialize ChromaDB: {e}")
 
-    def search_assessments(self, query: str, k: int = 4) -> List[Document]:
+    def search_assessments(self, query: str, k: int = 4) -> List[Dict]:
         """
         Retrieves the top-k most relevant assessments for a given query.
         
@@ -53,14 +45,27 @@ class CatalogRetriever:
             k: Maximum number of documents to retrieve
             
         Returns:
-            A list of Langchain Document objects.
+            A list of result dicts with 'page_content' and 'metadata' keys,
+            mimicking LangChain Document structure for compatibility.
         """
-        if not self._vector_store:
-            logger.error("Vector store is not initialized. Cannot perform search.")
+        if not self._collection:
+            logger.error("Collection is not initialized. Cannot perform search.")
             return []
 
         try:
-            docs = self._vector_store.similarity_search(query, k=k)
+            results = self._collection.query(
+                query_texts=[query],
+                n_results=k
+            )
+            
+            # Convert ChromaDB results to Document-like dicts
+            docs = []
+            if results and results["documents"] and results["metadatas"]:
+                for doc_text, metadata in zip(results["documents"][0], results["metadatas"][0]):
+                    docs.append({
+                        "page_content": doc_text,
+                        "metadata": metadata
+                    })
             return docs
         except Exception as e:
             logger.error(f"Error during vector search: {e}")

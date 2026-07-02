@@ -59,13 +59,13 @@ class ChatService:
             
         recommendations = [
             AssessmentRecommendation(
-                name=doc.metadata.get("name", "Unknown"),
-                url=doc.metadata.get("url", "#"),
-                test_type=doc.metadata.get("test_type", "General")
+                name=doc["metadata"].get("name", "Unknown"),
+                url=doc["metadata"].get("url", "#"),
+                test_type=doc["metadata"].get("test_type", "General")
             ) for doc in docs
         ]
             
-        context = "\n\n".join([d.page_content for d in docs])
+        context = "\n\n".join([d["page_content"] for d in docs])
         prompt = RECOMMEND_PROMPT.format(query=query, context=context)
         response_text = self.llm.generate_text(prompt)
         
@@ -75,7 +75,7 @@ class ChatService:
         query = self._extract_latest_query(request)
         docs = self.retriever.search_assessments(query, k=3)
         
-        context = "\n\n".join([d.page_content for d in docs])
+        context = "\n\n".join([d["page_content"] for d in docs])
         prompt = COMPARE_PROMPT.format(query=query, context=context)
         response_text = self.llm.generate_text(prompt)
         
@@ -90,13 +90,13 @@ class ChatService:
         
         recommendations = [
             AssessmentRecommendation(
-                name=doc.metadata.get("name", "Unknown"),
-                url=doc.metadata.get("url", "#"),
-                test_type=doc.metadata.get("test_type", "General")
+                name=doc["metadata"].get("name", "Unknown"),
+                url=doc["metadata"].get("url", "#"),
+                test_type=doc["metadata"].get("test_type", "General")
             ) for doc in docs
         ]
             
-        context = "\n\n".join([d.page_content for d in docs])
+        context = "\n\n".join([d["page_content"] for d in docs])
         prompt = REFINE_PROMPT.format(query=query, context=context)
         response_text = self.llm.generate_text(prompt)
         
