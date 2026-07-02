@@ -42,8 +42,8 @@ def create_app() -> FastAPI:
     async def serve_frontend():
         return FileResponse(FRONTEND_DIR / "index.html")
 
-    # Mount static frontend assets (CSS, JS) — must be after API routes
-    app.mount("/", StaticFiles(directory=str(FRONTEND_DIR)), name="frontend")
+    # Mount static frontend assets (CSS, JS) at /static so they don't intercept API routes
+    app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="frontend")
 
     @app.on_event("startup")
     async def startup_event():
