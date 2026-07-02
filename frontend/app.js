@@ -81,7 +81,7 @@ chatForm.addEventListener('submit', async (e) => {
 
     try {
         // Send request to our FastAPI backend
-        const response = await fetch('http://localhost:8000/chat', {
+        const response = await fetch('/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ conversation: conversationHistory })

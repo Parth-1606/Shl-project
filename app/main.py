@@ -1,6 +1,10 @@
 import logging
+import os
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from app.api.health import router as health_router
 from app.api.chat import router as chat_router
@@ -8,6 +12,9 @@ from app.api.chat import router as chat_router
 # Configure startup logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
+
+# Resolve frontend directory relative to this file's location
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 
 def create_app() -> FastAPI:
     """FastAPI application factory."""
@@ -29,6 +36,14 @@ def create_app() -> FastAPI:
     # Include API Routers
     app.include_router(health_router, tags=["Health"])
     app.include_router(chat_router, tags=["Chat"])
+
+    # Serve the frontend index.html at the root
+    @app.get("/", include_in_schema=False)
+    async def serve_frontend():
+        return FileResponse(FRONTEND_DIR / "index.html")
+
+    # Mount static frontend assets (CSS, JS) — must be after API routes
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIR)), name="frontend")
 
     @app.on_event("startup")
     async def startup_event():
