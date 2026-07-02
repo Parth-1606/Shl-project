@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 # LangChain imports
 from langchain_core.documents import Document
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import Chroma
 
 # Load environment variables
@@ -17,9 +17,13 @@ logger = logging.getLogger(__name__)
 
 def build_vector_store():
     """
-    Reads the catalog.json file, creates embedding representations using HuggingFace, 
-    and stores them in a local ChromaDB instance.
+    Reads the catalog.json file, creates embedding representations using 
+    Google Generative AI Embeddings, and stores them in a local ChromaDB instance.
     """
+    api_key = os.getenv("GOOGLE_API_KEY", "")
+    if not api_key:
+        logger.error("GOOGLE_API_KEY is not set. Cannot generate embeddings.")
+        return
 
     catalog_path = os.getenv("CATALOG_JSON_PATH", "./app/catalog/data/catalog.json")
     chroma_dir = os.getenv("CHROMA_DB_DIR", "./chroma_db")
@@ -64,10 +68,14 @@ def build_vector_store():
         doc = Document(page_content=content, metadata=metadata)
         documents.append(doc)
 
-    logger.info(f"Prepared {len(documents)} documents. Initializing embeddings...")
+    logger.info(f"Prepared {len(documents)} documents. Initializing Google AI embeddings...")
     
-    # We use sentence-transformers for robust local embeddings
-    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    # Use Google Generative AI Embeddings (API-based, no local model needed)
+    # This avoids loading PyTorch/sentence-transformers which use ~400MB RAM
+    embeddings = GoogleGenerativeAIEmbeddings(
+        model="models/embedding-001",
+        google_api_key=api_key
+    )
     
     logger.info("Generating embeddings and writing to ChromaDB. This may take a moment...")
     

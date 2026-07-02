@@ -4,7 +4,7 @@ from typing import List
 from dotenv import load_dotenv
 
 from langchain_core.documents import Document
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain_community.vectorstores import Chroma
 
 load_dotenv()
@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 class CatalogRetriever:
     """
     Service layer for querying the ChromaDB vector store.
-    Uses Dependency Injection principles: it can be instantiated once
-    and passed to the chat service.
+    Uses Google Generative AI Embeddings (API-based, no local model needed)
+    to keep memory usage low on Render's free tier.
     """
     
     def __init__(self):
@@ -30,7 +30,11 @@ class CatalogRetriever:
             return
 
         try:
-            embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+            api_key = os.getenv("GOOGLE_API_KEY", "")
+            embeddings = GoogleGenerativeAIEmbeddings(
+                model="models/embedding-001",
+                google_api_key=api_key
+            )
             self._vector_store = Chroma(
                 persist_directory=self.chroma_dir,
                 embedding_function=embeddings,
@@ -56,8 +60,6 @@ class CatalogRetriever:
             return []
 
         try:
-            # Using maximal marginal relevance (MMR) or similarity search.
-            # Similarity search is standard, MMR helps if we want diversity.
             docs = self._vector_store.similarity_search(query, k=k)
             return docs
         except Exception as e:
