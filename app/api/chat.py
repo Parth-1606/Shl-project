@@ -11,29 +11,21 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Dependency Injection logic for the FastAPI endpoints
-# This ensures we don't recreate expensive objects (like LLMs or DB connections) on every single POST request.
-
-_llm_service = None
-_intent_classifier = None
-_retriever = None
+# Singleton services — initialized eagerly at module load so the heavy
+# HuggingFace model download + ChromaDB connection happen at startup,
+# not on the first user request (which would cause a timeout on Render).
+_llm_service = LLMService()
+_intent_classifier = IntentClassifier(llm_service=_llm_service)
+_retriever = CatalogRetriever()
+_chat_service = ChatService(
+    llm_service=_llm_service,
+    intent_classifier=_intent_classifier,
+    retriever=_retriever
+)
 
 def get_chat_service() -> ChatService:
     """Dependency provider for ChatService."""
-    global _llm_service, _intent_classifier, _retriever
-    
-    if _llm_service is None:
-        _llm_service = LLMService()
-    if _intent_classifier is None:
-        _intent_classifier = IntentClassifier(llm_service=_llm_service)
-    if _retriever is None:
-        _retriever = CatalogRetriever()
-        
-    return ChatService(
-        llm_service=_llm_service,
-        intent_classifier=_intent_classifier,
-        retriever=_retriever
-    )
+    return _chat_service
 
 @router.post("/chat", response_model=ChatResponse, summary="Stateless Chat Endpoint")
 async def chat_endpoint(request: ChatRequest, chat_service: ChatService = Depends(get_chat_service)):

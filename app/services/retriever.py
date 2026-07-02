@@ -29,11 +29,6 @@ class CatalogRetriever:
             logger.warning(f"ChromaDB directory not found at {self.chroma_dir}. Make sure to run build_embeddings.py first.")
             return
 
-        api_key = os.getenv("GOOGLE_API_KEY")
-        if not api_key or api_key == "your_gemini_api_key_here":
-            logger.error("GOOGLE_API_KEY is missing. Retriever cannot initialize embeddings.")
-            return
-
         try:
             embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
             self._vector_store = Chroma(

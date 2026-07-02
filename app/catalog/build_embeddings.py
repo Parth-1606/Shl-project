@@ -17,13 +17,9 @@ logger = logging.getLogger(__name__)
 
 def build_vector_store():
     """
-    Reads the catalog.json file, creates embedding representations using Gemini, 
+    Reads the catalog.json file, creates embedding representations using HuggingFace, 
     and stores them in a local ChromaDB instance.
     """
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if not api_key or api_key == "your_gemini_api_key_here":
-        logger.error("GOOGLE_API_KEY is missing or invalid. Cannot generate embeddings.")
-        return
 
     catalog_path = os.getenv("CATALOG_JSON_PATH", "./app/catalog/data/catalog.json")
     chroma_dir = os.getenv("CHROMA_DB_DIR", "./chroma_db")
