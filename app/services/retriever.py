@@ -32,7 +32,7 @@ class CatalogRetriever:
         try:
             api_key = os.getenv("GOOGLE_API_KEY", "")
             embeddings = GoogleGenerativeAIEmbeddings(
-                model="models/embedding-001",
+                model="models/text-embedding-004",
                 google_api_key=api_key
             )
             self._vector_store = Chroma(

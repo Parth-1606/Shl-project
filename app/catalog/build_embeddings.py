@@ -73,7 +73,7 @@ def build_vector_store():
     # Use Google Generative AI Embeddings (API-based, no local model needed)
     # This avoids loading PyTorch/sentence-transformers which use ~400MB RAM
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/embedding-001",
+        model="models/text-embedding-004",
         google_api_key=api_key
     )
     
